@@ -1,7 +1,5 @@
 namespace NewApp
 
-open Registries
-
 module Shell =
     open Avalonia.Controls
     open Avalonia.FuncUI
@@ -37,7 +35,7 @@ module Shell =
     type MainWindow() as this =
         inherit HostWindow()
         do
-            base.Title <- "Full App"
+            base.Title <- "App Manager"
             base.Width <- 800.0
             base.Height <- 600.0
             base.MinWidth <- 800.0
