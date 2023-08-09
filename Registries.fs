@@ -11,7 +11,7 @@ type Container = Container of string
 
 type Status = | Online | Offline
 
-type RegistryStatus = RegistryStatus of string * Status
+type RegistryStatus = RegistryStatus of Registry * Status
 
 type ImageResult =
    { Name: string option
@@ -51,16 +51,29 @@ let parseImageFromRes { RepoTags = tags; Name = name; Created = c; Digest = d } 
       created = c
       digest = d }
 
-let parseStatus name res =
+let parseStatus registry res =
     match res with
-    | Ok _ -> RegistryStatus (name, Online)
-    | Error _ -> RegistryStatus (name,Offline)
+    | Ok _                      -> Ok <| RegistryStatus (registry, Online)
+    | Error (NonZeroExitCode _) -> Ok <| RegistryStatus (registry,Offline)
+    | Error (CommandNotFound s) -> Error <| CommandNotFound s
     
-let statusIO { name = name; location = location } =
-    shellIO "curl" ["-Is"; location ] id |> parseStatus name
+let statusIO registry =
+    shellIO "curl" ["-Is"; registry.location ] id |> parseStatus registry
+
+let statusesIO (rs: Registry list) =
+    List.fold
+        (fun res r ->
+            match (statusIO r, res) with
+            | Ok s, Ok xs -> Ok(s :: xs)
+            | _, Error e
+            | Error e, _ -> Error e)
+        (Ok [])
+        rs    
     
 let inspectIO { location = location } (Container container) =
-    shellIO "skopeo" [ "inspect"; $"docker://{location}/{container}"; "--tls-verify=false" ] JsonSerializer.Deserialize<ImageResult>
+    shellIO "skopeo"
+            [ "inspect"; $"docker://{location}/{container}"; "--tls-verify=false" ] 
+            JsonSerializer.Deserialize
     |> Result.map parseImageFromRes
     
 let registries = [

@@ -6,11 +6,13 @@ open Avalonia.FuncUI
 open Avalonia.Layout
 open Registries
 open GridComponent
+open Bash
 
 let display res =
      match res with
      | Ok imgList -> grid [imgList]
-     | Error error -> TextBlock.create [ TextBlock.text error ]
+     | Error (NonZeroExitCode e)
+     | Error (CommandNotFound e) -> TextBlock.create [ TextBlock.text e ]
 
 let view registry =
     Component.create("Registry View", fun ctx ->
