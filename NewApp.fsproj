@@ -9,7 +9,7 @@
         <Compile Include="Bash.fs" />
         <Compile Include="Registries.fs" />
         <Compile Include="GridComponent.fs" />
-        <Compile Include="Counter.fs" />
+        <Compile Include="Apps.fs" />
         <Compile Include="Devices.fs" />
         <Compile Include="About.fs" />
         <Compile Include="Shell.fs" />

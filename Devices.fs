@@ -35,7 +35,7 @@ let grid xs f =
 let deviceView dev : IView =
     match dev with
     | None -> TextBlock.create []
-    | Some d -> Counter.view { name = d; location = "localhost:5000" }
+    | Some d -> Apps.view { name = d; location = "localhost:5000" }
                                                               
 let view =
     Component.create("Counter", fun ctx ->

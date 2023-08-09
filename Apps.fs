@@ -1,4 +1,4 @@
-module Counter 
+module Apps 
 
 open Avalonia.Controls
 open Avalonia.FuncUI.DSL
@@ -13,7 +13,7 @@ let display res =
      | Error error -> TextBlock.create [ TextBlock.text error ]
 
 let view registry =
-    Component.create("Counter", fun ctx ->
+    Component.create("Registry View", fun ctx ->
         let state = ctx.useState <| inspectIO registry (Container "newapp")
         
         StackPanel.create [

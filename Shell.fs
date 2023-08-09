@@ -21,10 +21,6 @@ module Shell =
                                 TabItem.content Devices.view 
                             ]
                             TabItem.create [
-                                TabItem.header "Apps"
-                                TabItem.content (Counter.view (List.head registries))
-                            ]
-                            TabItem.create [
                                 TabItem.header "About"
                                 TabItem.content About.view
                             ]
